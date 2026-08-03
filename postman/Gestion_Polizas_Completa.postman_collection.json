@@ -1,0 +1,697 @@
+{
+  "info": {
+    "_postman_id": "1b807e31-905f-4d4b-a1d5-gestion-polizas",
+    "name": "Gestión de Pólizas de Arrendamiento - Completa",
+    "description": "Colección autónoma para probar la API REST de gestión de pólizas y riesgos. Incluye dentro de la propia colección la URL base, la API key y los IDs de prueba, por lo que no requiere importar ni seleccionar un ambiente de Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string",
+      "description": "URL local de la aplicación"
+    },
+    {
+      "key": "apiKey",
+      "value": "123456",
+      "type": "string",
+      "description": "API key requerida por los endpoints"
+    },
+    {
+      "key": "polizaIndividualActivaId",
+      "value": "1",
+      "type": "string",
+      "description": "ID inicial de la póliza individual activa"
+    },
+    {
+      "key": "polizaColectivaActivaId",
+      "value": "2",
+      "type": "string",
+      "description": "ID inicial de la póliza colectiva activa"
+    },
+    {
+      "key": "polizaCanceladaId",
+      "value": "3",
+      "type": "string",
+      "description": "ID inicial de la póliza cancelada"
+    },
+    {
+      "key": "riesgoActivoId",
+      "value": "2",
+      "type": "string",
+      "description": "ID inicial de un riesgo activo"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Consultas",
+      "item": [
+        {
+          "name": "Consultar todas las pólizas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ]
+            },
+            "description": "Retorna las pólizas cargadas en la base de datos."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('La respuesta es un arreglo', function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar pólizas por tipo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas?tipo=COLECTIVA",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "COLECTIVA"
+                }
+              ]
+            },
+            "description": "Filtra las pólizas por tipo."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Filtrar pólizas por tipo y estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas?tipo=COLECTIVA&estado=ACTIVA",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "COLECTIVA"
+                },
+                {
+                  "key": "estado",
+                  "value": "ACTIVA"
+                }
+              ]
+            },
+            "description": "Filtra las pólizas por tipo y estado."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar riesgos de una póliza",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaColectivaActivaId}}/riesgos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaColectivaActivaId}}",
+                "riesgos"
+              ]
+            },
+            "description": "Consulta los riesgos asociados a una póliza colectiva."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Renovación de pólizas",
+      "item": [
+        {
+          "name": "Renovar póliza activa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaIndividualActivaId}}/renovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaIndividualActivaId}}",
+                "renovar"
+              ]
+            },
+            "description": "Renueva una póliza activa aplicando el porcentaje de IPC.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ipcPorcentaje\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('La póliza queda renovada', function () {",
+                  "    pm.expect(pm.response.json().estado).to.eql('RENOVADA');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Intentar renovar póliza cancelada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaCanceladaId}}/renovar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaCanceladaId}}",
+                "renovar"
+              ]
+            },
+            "description": "Valida que una póliza cancelada no pueda renovarse.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ipcPorcentaje\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 422', function () {",
+                  "    pm.response.to.have.status(422);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Gestión de riesgos",
+      "item": [
+        {
+          "name": "Agregar riesgo a póliza colectiva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaColectivaActivaId}}/riesgos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaColectivaActivaId}}",
+                "riesgos"
+              ]
+            },
+            "description": "Crea un nuevo riesgo activo para una póliza colectiva.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Bodega de almacenamiento\",\n  \"direccionInmueble\": \"Avenida 68 # 20-50, Bogotá\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Intentar agregar riesgo a póliza individual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaIndividualActivaId}}/riesgos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaIndividualActivaId}}",
+                "riesgos"
+              ]
+            },
+            "description": "Valida que no se agreguen riesgos adicionales a una póliza individual.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"descripcion\": \"Riesgo adicional\",\n  \"direccionInmueble\": \"Calle 20 # 30-40, Bogotá\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 422', function () {",
+                  "    pm.response.to.have.status(422);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancelar riesgo activo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/riesgos/{{riesgoActivoId}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "riesgos",
+                "{{riesgoActivoId}}",
+                "cancelar"
+              ]
+            },
+            "description": "Cancela un riesgo activo y registra su fecha de cancelación."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('El riesgo queda cancelado', function () {",
+                  "    pm.expect(pm.response.json().estado).to.eql('CANCELADO');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Cancelación de pólizas",
+      "item": [
+        {
+          "name": "Cancelar póliza y riesgos",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/{{polizaColectivaActivaId}}/cancelar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "{{polizaColectivaActivaId}}",
+                "cancelar"
+              ]
+            },
+            "description": "Cancela una póliza colectiva y todos sus riesgos activos."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('La póliza queda cancelada', function () {",
+                  "    pm.expect(pm.response.json().estado).to.eql('CANCELADA');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Seguridad y errores",
+      "item": [
+        {
+          "name": "Solicitud sin API key",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ]
+            },
+            "description": "Valida que una solicitud sin API key sea rechazada.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Solicitud con API key incorrecta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ]
+            },
+            "description": "Valida que una API key incorrecta sea rechazada.",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "clave-incorrecta",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 401', function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar póliza inexistente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas/999999/riesgos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas",
+                "999999",
+                "riesgos"
+              ]
+            },
+            "description": "Valida la respuesta cuando la póliza no existe."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 404', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar con tipo inválido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/polizas?tipo=OTRA",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "polizas"
+              ],
+              "query": [
+                {
+                  "key": "tipo",
+                  "value": "OTRA"
+                }
+              ]
+            },
+            "description": "Valida un parámetro enum inválido."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 400', function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. CORE simulado",
+      "item": [
+        {
+          "name": "Enviar evento al CORE mock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/core-mock/evento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "core-mock",
+                "evento"
+              ]
+            },
+            "description": "Prueba directamente el endpoint que simula el CORE.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operacion\": \"RENOVAR_POLIZA\",\n  \"polizaId\": 1,\n  \"riesgoId\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Código HTTP esperado: 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -671,10 +671,40 @@ Esto permite abrir la consola H2 y evita interferir con el procesamiento interno
 ---
 
 ## 🌐 7. Endpoints y pruebas manuales
+### 🎯Colección de Postman
+
+El proyecto incluye una colección de Postman con todos los endpoints de la API, casos exitosos, validaciones de negocio, pruebas de seguridad y escenarios de error.
+
+Archivo incluido:
+
+```text
+postman/Gestion_Polizas_Completa.postman_collection.json
+```
+
+La colección ya contiene la URL base, la API key y los identificadores iniciales de prueba, por lo que no requiere configurar un ambiente adicional.
+
+#### Importar en Postman
+
+1. Iniciar la aplicación:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+2. Abrir Postman.
+3. Seleccionar **Import**.
+4. Elegir el archivo:
+
+```text
+postman/Gestion_Polizas_Completa.postman_collection.json
+```
+
+5. Seleccionar **Import**.
+6. Abrir la colección y ejecutar las solicitudes.
 
 Los siguientes comandos usan cURL estándar y pueden importarse directamente en Postman.
 
-### Importar un comando en Postman
+### 🎯Importar un comando en Postman
 
 1. Abrir Postman.
 2. Seleccionar **Import**.
