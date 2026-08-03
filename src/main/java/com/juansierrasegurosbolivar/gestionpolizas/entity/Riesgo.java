@@ -1,6 +1,5 @@
-package com.juansierrasegurosbolivar.gestion_polizas.entity;
+package com.juansierrasegurosbolivar.gestionpolizas.entity;
 
-import com.juansierrasegurosbolivar.gestion_polizas.entity.enums.EstadoRiesgo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,9 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import com.juansierrasegurosbolivar.gestionpolizas.entity.enums.EstadoRiesgo;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(
     name = "riesgos",
@@ -63,8 +70,6 @@ public class Riesgo {
     @Version
     private Long version;
 
-    public Riesgo() {
-    }
 
     public Riesgo(
         String descripcion,
@@ -76,51 +81,4 @@ public class Riesgo {
         this.estado = estado;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Poliza getPoliza() {
-        return poliza;
-    }
-
-    public void setPoliza(Poliza poliza) {
-        this.poliza = poliza;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getDireccionInmueble() {
-        return direccionInmueble;
-    }
-
-    public void setDireccionInmueble(String direccionInmueble) {
-        this.direccionInmueble = direccionInmueble;
-    }
-
-    public EstadoRiesgo getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoRiesgo estado) {
-        this.estado = estado;
-    }
-
-    public LocalDateTime getFechaCancelacion() {
-        return fechaCancelacion;
-    }
-
-    public void setFechaCancelacion(LocalDateTime fechaCancelacion) {
-        this.fechaCancelacion = fechaCancelacion;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
 }

@@ -1,9 +1,10 @@
-package com.juansierrasegurosbolivar.gestion_polizas.repository;
+package com.juansierrasegurosbolivar.gestionpolizas.repository;
 
-import com.juansierrasegurosbolivar.gestion_polizas.entity.Poliza;
-import com.juansierrasegurosbolivar.gestion_polizas.entity.enums.EstadoPoliza;
-import com.juansierrasegurosbolivar.gestion_polizas.entity.enums.TipoPoliza;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.juansierrasegurosbolivar.gestionpolizas.entity.Poliza;
+import com.juansierrasegurosbolivar.gestionpolizas.entity.enums.EstadoPoliza;
+import com.juansierrasegurosbolivar.gestionpolizas.entity.enums.TipoPoliza;
 
 import java.util.List;
 

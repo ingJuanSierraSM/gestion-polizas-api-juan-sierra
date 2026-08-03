@@ -1,7 +1,5 @@
-package com.juansierrasegurosbolivar.gestion_polizas.entity;
+package com.juansierrasegurosbolivar.gestionpolizas.entity;
 
-import com.juansierrasegurosbolivar.gestion_polizas.entity.enums.EstadoPoliza;
-import com.juansierrasegurosbolivar.gestion_polizas.entity.enums.TipoPoliza;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +13,9 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,6 +23,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.juansierrasegurosbolivar.gestionpolizas.entity.enums.EstadoPoliza;
+import com.juansierrasegurosbolivar.gestionpolizas.entity.enums.TipoPoliza;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(
     name = "polizas",
@@ -83,8 +90,6 @@ public class Poliza {
     )
     private List<Riesgo> riesgos = new ArrayList<>();
 
-    public Poliza() {
-    }
 
     public Poliza(
         TipoPoliza tipo,
@@ -109,83 +114,4 @@ public class Poliza {
         riesgo.setPoliza(this);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public TipoPoliza getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoPoliza tipo) {
-        this.tipo = tipo;
-    }
-
-    public EstadoPoliza getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoPoliza estado) {
-        this.estado = estado;
-    }
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public LocalDate getFechaFin() {
-        return fechaFin;
-    }
-
-    public void setFechaFin(LocalDate fechaFin) {
-        this.fechaFin = fechaFin;
-    }
-
-    public Integer getMesesVigenciaInicial() {
-        return mesesVigenciaInicial;
-    }
-
-    public void setMesesVigenciaInicial(Integer mesesVigenciaInicial) {
-        this.mesesVigenciaInicial = mesesVigenciaInicial;
-    }
-
-    public BigDecimal getCanonMensual() {
-        return canonMensual;
-    }
-
-    public void setCanonMensual(BigDecimal canonMensual) {
-        this.canonMensual = canonMensual;
-    }
-
-    public BigDecimal getPrima() {
-        return prima;
-    }
-
-    public void setPrima(BigDecimal prima) {
-        this.prima = prima;
-    }
-
-    public LocalDateTime getFechaCancelacion() {
-        return fechaCancelacion;
-    }
-
-    public void setFechaCancelacion(LocalDateTime fechaCancelacion) {
-        this.fechaCancelacion = fechaCancelacion;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public List<Riesgo> getRiesgos() {
-        return riesgos;
-    }
-
-    public void setRiesgos(List<Riesgo> riesgos) {
-        this.riesgos = riesgos;
-    }
 }

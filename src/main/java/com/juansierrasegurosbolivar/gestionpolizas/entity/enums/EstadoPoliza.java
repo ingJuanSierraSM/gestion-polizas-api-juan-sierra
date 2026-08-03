@@ -1,4 +1,4 @@
-package com.juansierrasegurosbolivar.gestion_polizas.entity.enums;
+package com.juansierrasegurosbolivar.gestionpolizas.entity.enums;
 
 public enum EstadoPoliza {
     ACTIVA,
