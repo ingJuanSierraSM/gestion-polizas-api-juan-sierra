@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -77,6 +78,25 @@ public class GlobalExceptionHandler {
         return buildResponse(
             HttpStatus.BAD_REQUEST,
             "El cuerpo de la solicitud no tiene un formato válido",
+            request.getRequestURI(),
+            Collections.emptyMap()
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiErrorResponse> handleTypeMismatch(
+        MethodArgumentTypeMismatchException exception,
+        HttpServletRequest request
+    ) {
+        String mensaje = String.format(
+            "El valor '%s' no es válido para el parámetro '%s'",
+            exception.getValue(),
+            exception.getName()
+        );
+
+        return buildResponse(
+            HttpStatus.BAD_REQUEST,
+            mensaje,
             request.getRequestURI(),
             Collections.emptyMap()
         );
