@@ -102,6 +102,19 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(CoreIntegrationException.class)
+    public ResponseEntity<ApiErrorResponse> handleCoreIntegration(
+        CoreIntegrationException exception,
+        HttpServletRequest request
+    ) {
+        return buildResponse(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            exception.getMessage(),
+            request.getRequestURI(),
+            Collections.emptyMap()
+        );
+    }
+
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ApiErrorResponse> handleOptimisticLocking(
         OptimisticLockingFailureException exception,

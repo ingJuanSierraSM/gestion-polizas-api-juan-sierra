@@ -16,6 +16,9 @@ import com.juansierrasegurosbolivar.gestionpolizas.service.RiesgoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.juansierrasegurosbolivar.gestionpolizas.dto.request.CoreEventoRequest;
+import com.juansierrasegurosbolivar.gestionpolizas.integration.CoreClient;
+import com.juansierrasegurosbolivar.gestionpolizas.integration.OperacionCore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +30,7 @@ public class RiesgoServiceImpl implements RiesgoService {
 
     private final PolizaRepository polizaRepository;
     private final RiesgoRepository riesgoRepository;
+    private final CoreClient coreClient;
 
     @Override
     public List<RiesgoResponse> consultarPorPoliza(
@@ -51,6 +55,14 @@ public class RiesgoServiceImpl implements RiesgoService {
 
         validarCreacionRiesgo(poliza);
 
+        coreClient.enviarEvento(
+            new CoreEventoRequest(
+                OperacionCore.AGREGAR_RIESGO,
+                polizaId,
+                null
+            )
+        );
+
         Riesgo riesgo = new Riesgo(
             request.getDescripcion().trim(),
             request.getDireccionInmueble().trim(),
@@ -73,6 +85,14 @@ public class RiesgoServiceImpl implements RiesgoService {
         if (riesgo.getEstado() == EstadoRiesgo.CANCELADO) {
             return RiesgoMapper.toResponse(riesgo);
         }
+
+        coreClient.enviarEvento(
+            new CoreEventoRequest(
+                OperacionCore.CANCELAR_RIESGO,
+                riesgo.getPoliza().getId(),
+                riesgoId
+            )
+        );
 
         riesgo.setEstado(EstadoRiesgo.CANCELADO);
         riesgo.setFechaCancelacion(LocalDateTime.now());

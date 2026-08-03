@@ -32,3 +32,6 @@ server:
 app:
   security:
     api-key: ${API_KEY:123456}
+
+  core:
+    base-url: ${CORE_BASE_URL:http://localhost:8080}

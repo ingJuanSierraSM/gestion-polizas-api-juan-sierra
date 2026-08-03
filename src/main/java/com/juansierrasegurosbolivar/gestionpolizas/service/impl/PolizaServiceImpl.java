@@ -15,6 +15,9 @@ import com.juansierrasegurosbolivar.gestionpolizas.service.PolizaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.juansierrasegurosbolivar.gestionpolizas.dto.request.CoreEventoRequest;
+import com.juansierrasegurosbolivar.gestionpolizas.integration.CoreClient;
+import com.juansierrasegurosbolivar.gestionpolizas.integration.OperacionCore;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,6 +36,7 @@ public class PolizaServiceImpl implements PolizaService {
 
     private final PolizaRepository polizaRepository;
     private final RiesgoRepository riesgoRepository;
+    private final CoreClient coreClient;
 
     @Override
     public List<PolizaResponse> consultar(
@@ -107,6 +111,14 @@ public class PolizaServiceImpl implements PolizaService {
         LocalDate nuevaFechaFin = nuevaFechaInicio
             .plusMonths(poliza.getMesesVigenciaInicial())
             .minusDays(1);
+        
+        coreClient.enviarEvento(
+            new CoreEventoRequest(
+                OperacionCore.RENOVAR_POLIZA,
+                polizaId,
+                null
+            )
+        );
 
         poliza.setFechaInicio(nuevaFechaInicio);
         poliza.setFechaFin(nuevaFechaFin);
@@ -128,6 +140,14 @@ public class PolizaServiceImpl implements PolizaService {
         if (poliza.getEstado() == EstadoPoliza.CANCELADA) {
             return PolizaMapper.toResponse(poliza);
         }
+
+        coreClient.enviarEvento(
+            new CoreEventoRequest(
+                OperacionCore.CANCELAR_POLIZA,
+                polizaId,
+                null
+            )
+        );
 
         LocalDateTime fechaCancelacion =
             LocalDateTime.now();
